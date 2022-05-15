@@ -1,0 +1,68 @@
+(*Exemplo de plotagem de plano na Wolfram Language.
+
+Feito por Thiago Narcizo Cavalcanti
+ FT - UNICAMP
+ narcizo.xyz
+
+ 14/05/2022
+
+*)
+
+
+(*Definição de variáveis que serão o tamanho da plotagem*)
+a = 5;
+b = a + 1;
+
+(*exemplo de reta (não utilizado neste caso):*)(*g[t_]:={t,t/2,t/3};
+reta=ParametricPlot3D[g[t],{t,-10,10},PlotStyle->RGBColor[1,0,1]];*)
+
+(*---------------------------------------------------------------------------*)
+(*Defino os pontos pelos quais o plano passa*)
+P1  = {1, 0, 0};
+P2 = {0, 1, 0};
+P3 = {0, -1, 1};
+
+pontos = ListPointPlot3D[{P1, P2, P3}];
+
+(*Outra forma de plotar pontos:*)(*ponto=Graphics3D[{PointSize[Medium],Blue,Point[{1,0,0}],Blue,Point[{0,1,0}],Blue,Point[{0,-1,1}]}];*)
+
+(*---------------------------------------------------------------------------*)
+(*Definição da reta normal ao plano*)
+PV = Cross[(P2 - P1), (P3 - P1)];
+V = (PV + P1);
+
+(*Plotagem dos vetores:*)
+propvet = Graphics3D[Thickness[.005]];
+
+vetor1 = Graphics3D[Arrow[{P1, V}], ImageSize -> Large];
+vetor2 = Graphics3D[Arrow[{P1, P2}], ImageSize -> Large];
+vetor3 = Graphics3D[Arrow[{P1, P3}], ImageSize -> Large];
+
+(*---------------------------------------------------------------------------*)
+(*Defino o plano sob equação ax+by+cz+d=0 no intervalo [-a,a] em todas as direções*)
+plano = ContourPlot3D[
+   x + y + 2 z - 1 == 0, {x, -a, a}, {y, -a, a}, {z, -a, a}, 
+   AxesStyle -> Medium, AxesLabel -> {x, y, z}, Mesh -> 8, 
+   ContourStyle -> {Opacity[0.5], Directive[Red]}];
+
+(*---------------------------------------------------------------------------*)
+(*Textos para referência*)
+text = Graphics3D[{Text[Style["N = (1,1,2)", Medium], {1.2*V}]}];
+legenda = 
+  Graphics3D[{Text[Style["\[Pi]: x+y+2z-1=0", Large], {3, 0, 6}]}];
+
+(*---------------------------------------------------------------------------*)
+(*Plotagem de todos os elementos:*)
+Show[plano,(*reta,*)pontos, propvet, vetor1, vetor2, vetor3, text, legenda, AxesOrigin -> {0, 0, 0}, 
+ PlotRange -> {{-b, b}, {-b, b}, {-b, b}}, Boxed -> False, 
+ TicksStyle -> {}, TouchscreenAutoZoom -> False, 
+ ViewAngle -> 0.709078983043212`, 
+ ViewCenter -> {{0.5`, 0.5`, 0.5`}, {0.5738261596332812`, 
+    0.5100483837897745`}}, ViewMatrix -> Automatic, 
+ ViewPoint -> {0.5209891366007255`, -1.1617091078010928`, 
+   1.1463578714642886`}, ViewProjection -> "Automatic", 
+ ViewRange -> All, ViewVector -> Automatic, 
+ ViewVertical -> {0.16787825250050054`, -0.3429361541922402`, 
+   0.9242357310152071`}, Ticks -> None, 
+ AxesStyle -> Directive[GrayLevel[0], AbsoluteThickness[0.685`]]]
+(*---------------------------------------------------------------------------*)
